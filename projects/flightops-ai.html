@@ -1,0 +1,494 @@
+<!-- projects/flightops-ai.html -->
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Airline Flight Delay Prediction &amp; Analysis — Abdelrahman Ashraf Ahmed</title>
+<meta name="description" content="Case study: predicting 15+ minute arrival delays for U.S. domestic flights from 518,368 records. Data leakage removal, model comparison, Streamlit deployment and a four-page Power BI report.">
+<meta name="author" content="Abdelrahman Ashraf Ahmed">
+<meta name="theme-color" content="#0B0D0F" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FAFAF8" media="(prefers-color-scheme: light)">
+<link rel="canonical" href="https://abdelrahman-ashraf-da.github.io/portfolio/projects/flightops-ai.html">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Abdelrahman Ashraf Ahmed">
+<meta property="og:title" content="Airline Flight Delay Prediction &amp; Analysis — Case Study">
+<meta property="og:description" content="From a raw 544,003-row CSV to a deployed prediction app and a four-page Power BI report.">
+<meta property="og:url" content="https://abdelrahman-ashraf-da.github.io/portfolio/projects/flightops-ai.html">
+<meta property="og:image" content="https://abdelrahman-ashraf-da.github.io/portfolio/assets/images/og/og-flightops.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Airline Flight Delay Prediction &amp; Analysis — Case Study">
+<meta name="twitter:description" content="From a raw 544,003-row CSV to a deployed prediction app and a four-page Power BI report.">
+<meta name="twitter:image" content="https://abdelrahman-ashraf-da.github.io/portfolio/assets/images/og/og-flightops.png">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230B0D0F'/%3E%3Ctext x='32' y='43' font-family='Inter,sans-serif' font-size='28' font-weight='600' fill='%233ECFB2' text-anchor='middle'%3EAA%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Instrument+Sans:wght@600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../style.css">
+
+<script>
+(function () {
+  try {
+    var stored = localStorage.getItem('theme');
+    var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    document.documentElement.setAttribute('data-theme', theme);
+  } catch (e) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+  document.documentElement.classList.add('is-preload');
+})();
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "Airline Flight Delay Prediction and Analysis",
+  "author": {
+    "@type": "Person",
+    "name": "Abdelrahman Ashraf Ahmed"
+  },
+  "about": "Binary classification of 15+ minute flight arrival delays on U.S. domestic operations data",
+  "keywords": "machine learning, logistic regression, classification, Power BI, Streamlit, data analysis",
+  "url": "https://abdelrahman-ashraf-da.github.io/portfolio/projects/flightops-ai.html"
+}
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="progress" aria-hidden="true"><div class="progress__bar"></div></div>
+
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a class="nav__brand" href="../index.html">
+      <span class="nav__mark" aria-hidden="true">AA</span>
+      <span class="nav__name">Abdelrahman Ashraf</span>
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="../index.html#work">Work</a>
+      <a class="nav__link" href="../index.html#about">About</a>
+      <a class="nav__link" href="../index.html#stack">Stack</a>
+      <a class="nav__link" href="../index.html#contact">Contact</a>
+    </nav>
+
+    <div class="nav__actions">
+      <a class="nav__icon" href="https://github.com/Abdelrahman-Ashraf-DA" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.9 5.33.9 11.6c0 4.9 3.18 9.06 7.59 10.53.55.1.75-.24.75-.53v-2.06c-3.09.67-3.74-1.32-3.74-1.32-.5-1.29-1.23-1.63-1.23-1.63-1.01-.69.08-.68.08-.68 1.12.08 1.7 1.15 1.7 1.15 1 1.71 2.62 1.22 3.26.93.1-.72.39-1.22.7-1.5-2.47-.28-5.06-1.24-5.06-5.5 0-1.22.43-2.21 1.14-2.99-.11-.28-.5-1.41.11-2.94 0 0 .94-.3 3.07 1.14a10.6 10.6 0 0 1 5.6 0c2.13-1.44 3.06-1.14 3.06-1.14.61 1.53.23 2.66.11 2.94.71.78 1.14 1.77 1.14 2.99 0 4.27-2.6 5.21-5.08 5.49.4.35.76 1.03.76 2.08v3.08c0 .3.2.64.76.53a11.11 11.11 0 0 0 7.58-10.53C23.1 5.33 18.27.5 12 .5Z"/></svg>
+      </a>
+      <a class="nav__icon" href="https://www.linkedin.com/in/abdelrahman-ashraf-6a1358333/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05a3.74 3.74 0 0 1 3.37-1.85c3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13ZM7.12 20.45H3.55V9h3.57v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0Z"/></svg>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch colour theme" aria-pressed="false">
+        <svg class="theme-toggle__sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="theme-toggle__moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      </button>
+      <button class="nav__toggle" id="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-panel">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="nav__panel" id="nav-panel" hidden>
+  <nav class="nav__panel-inner" aria-label="Mobile">
+    <a class="nav__panel-link" href="../index.html#work">Work</a>
+    <a class="nav__panel-link" href="../index.html#about">About</a>
+    <a class="nav__panel-link" href="../index.html#stack">Stack</a>
+    <a class="nav__panel-link" href="../index.html#contact">Contact</a>
+    <div class="nav__panel-foot">
+      <a href="https://github.com/Abdelrahman-Ashraf-DA" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.linkedin.com/in/abdelrahman-ashraf-6a1358333/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+  </nav>
+</div>
+
+<main id="main">
+
+  <section class="cs-hero">
+    <div class="container">
+      <a class="cs-back" href="../index.html#work">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+        All work
+      </a>
+
+      <p class="eyebrow reveal">Case study · Machine Learning &amp; Business Intelligence</p>
+      <h1 class="cs-title reveal">Airline Flight Delay Prediction &amp; Analysis</h1>
+      <p class="cs-lead reveal">Using only the information available around departure, can we tell whether a flight will arrive 15 or more minutes late? A full pipeline across 518,368 U.S. domestic flight records, ending in a Streamlit prediction app and a four-page Power BI report.</p>
+
+      <div class="cs-meta reveal">
+        <div>
+          <span class="cs-meta__label">My role</span>
+          <span class="cs-meta__value">Modelling, Evaluation &amp; Deployment</span>
+        </div>
+        <div>
+          <span class="cs-meta__label">Context</span>
+          <span class="cs-meta__value">Team capstone — Advanced Data Analysis Track, Batch 9, National Telecommunication Institute (NTI), Egypt</span>
+        </div>
+        <div>
+          <span class="cs-meta__label">Task</span>
+          <span class="cs-meta__value">Binary classification</span>
+        </div>
+        <div>
+          <span class="cs-meta__label">Outputs</span>
+          <span class="cs-meta__value">Streamlit app · Power BI report</span>
+        </div>
+      </div>
+
+      <ul class="tags reveal">
+        <li class="tag">Python</li>
+        <li class="tag">Pandas</li>
+        <li class="tag">NumPy</li>
+        <li class="tag">Matplotlib</li>
+        <li class="tag">Seaborn</li>
+        <li class="tag">Scikit-learn</li>
+        <li class="tag">Streamlit</li>
+        <li class="tag">Power BI</li>
+        <li class="tag">joblib</li>
+        <li class="tag">Git</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cs-section" aria-labelledby="problem-title">
+    <div class="container">
+      <div class="cs-section__head reveal">
+        <p class="eyebrow">01 — Problem</p>
+        <h2 class="section__title" id="problem-title">Delays are expensive, and they cascade</h2>
+      </div>
+      <div class="prose reveal">
+        <p>Flight delays create real operational and customer-service problems for airlines and airports. Knowing that a flight is going to land late while it is still on the ground is worth more than knowing it after the fact — crews, gates and connecting passengers can all be re-planned.</p>
+        <p>So the project was framed as a prediction question rather than a reporting one: <strong>can we predict, using information available around departure, whether an operating flight will arrive 15 or more minutes late?</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--alt" aria-labelledby="objective-title">
+    <div class="container">
+      <div class="cs-section__head reveal">
+        <p class="eyebrow">02 — Objective</p>
+        <h2 class="section__title" id="objective-title">What the project set out to do</h2>
+      </div>
+      <div class="prose reveal">
+        <ul>
+          <li>Identify the carrier, route and operational factors associated with arrival delays.</li>
+          <li>Provide clear visual evidence answering the key business questions about delays.</li>
+          <li>Predict arrival-delay risk as a binary classification problem.</li>
+          <li>Compare models and select one on defined criteria rather than on accuracy alone.</li>
+          <li>Deploy the result as an interactive tool (Streamlit) alongside a business dashboard (Power BI).</li>
+        </ul>
+        <p>A success criterion was fixed before modelling began: <strong>F1-score ≥ 0.70</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section" aria-labelledby="dataset-title">
+    <div class="container">
+      <div class="cs-section__head reveal">
+        <p class="eyebrow">03 — Dataset</p>
+        <h2 class="section__title" id="dataset-title">One month of U.S. domestic operations</h2>
+      </div>
+      <div class="prose reveal">
+        <p>The source file is <code>T_ONTIME_REPORTING.csv</code>, covering U.S. domestic flight operations for January 2026.</p>
+      </div>
+      <div class="kv-list reveal">
+        <div class="kv-list__row"><span class="kv-list__key">Raw flight records</span><span class="kv-list__value">544,003</span></div>
+        <div class="kv-list__row"><span class="kv-list__key">Columns</span><span class="kv-list__value">24</span></div>
+        <div class="kv-list__row"><span class="kv-list__key">Carriers</span><span class="kv-list__value">13</span></div>
+        <div class="kv-list__row"><span class="kv-list__key">Origin airports</span><span class="kv-list__value">341</span></div>
+        <div class="kv-list__row"><span class="kv-list__key">Destination airports</span><span class="kv-list__value">342</span></div>
+        <div class="kv-list__row"><span class="kv-list__key">Records used for modelling</span><span class="kv-list__value">518,368</span></div>
+        <div class="kv-list__row"><span class="kv-list__key">Target</span><span class="kv-list__value">Arrival Delay ≥ 15 min (1 / 0)</span></div>
+        <div class="kv-list__row"><span class="kv-list__key">Class balance</span><span class="kv-list__value">≈ 80% on-time / 20% delayed</span></div>
+      </div>
+      <div class="prose reveal">
+        <p>The target is imbalanced, which is why accuracy alone was never going to be a sufficient measure of success — a model that predicts "on time" for everything already scores around 80%.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--alt" aria-labelledby="prep-title">
+    <div class="container">
+      <div class="cs-section__head reveal">
+        <p class="eyebrow">04 — Data preparation</p>
+        <h2 class="section__title" id="prep-title">Deciding what the model is allowed to know</h2>
+      </div>
+      <div class="prose reveal">
+        <p>Cancelled flights were removed first: the delay target is artificial for a flight that never operated. That step took the working set from 544,003 rows to 518,368.</p>
+
+        <h3>Removing data leakage</h3>
+        <p>The most important decision was cutting columns the model could not legitimately have at prediction time. <code>ARR_DELAY</code>, <code>ACTUAL_ELAPSED_TIME</code>, <code>TAXI_OUT</code> and <code>Arrival Time Block</code> are all only known during or after the flight. Leaving any of them in would let the model cheat and produce a score that would collapse the moment it met a real flight.</p>
+
+        <h3>Removing non-predictive identifiers</h3>
+        <p>Tail numbers, flight numbers and duplicate airport, city and state columns carry no generalisable signal and were dropped.</p>
+
+        <h3>Feature engineering and encoding</h3>
+        <ul>
+          <li><strong>Departure Hour</strong> extracted from the scheduled departure time.</li>
+          <li>Low-frequency airports grouped into an <code>Other</code> bucket, keeping the top 20, then one-hot encoded along with carrier, origin and destination.</li>
+          <li>Train/test split of 80/20, stratified to preserve the class balance.</li>
+          <li><code>StandardScaler</code> fitted on the training set only — scaling on the full dataset is leakage of a subtler kind.</li>
+        </ul>
+      </div>
+
+      <div class="callout reveal">
+        <p class="callout__title">The lesson that stuck</p>
+        <p>Identifying and removing the leakage columns was the real technical challenge of this project. A model that looks excellent because it can already see the answer is worse than useless — it is confidently wrong in production. Being strict about what is knowable at prediction time is the part of the work that actually determines whether a model is worth deploying.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section" aria-labelledby="eda-title">
+    <div class="container">
+      <div class="cs-section__head reveal">
+        <p class="eyebrow">05 — Exploratory analysis</p>
+        <h2 class="section__title" id="eda-title">What the data said before any model did</h2>
+      </div>
+      <div class="prose reveal">
+        <ul>
+          <li><strong>Departure delay is the single strongest signal</strong> for arrival delay (correlation ≈ 0.49).</li>
+          <li><strong>Delay rate varies widely by carrier.</strong> Highest: JetBlue Airways (32.7%), Spirit Airlines (28.8%), Frontier Airlines (28.6%). Lowest: Southwest Airlines (14.9%), Republic Airways (15.2%), Envoy Air (16.3%).</li>
+          <li><strong>Detroit (DTW) has the highest airport delay rate</strong> at 30.7%, ahead of major hubs including Chicago O'Hare and New York JFK.</li>
+          <li><strong>Delay rate climbs steadily through the day</strong> — lowest around 5 AM, highest in the evening. This is consistent with delay propagation: a late aircraft pushes its own later flights late.</li>
+          <li><strong>Flight distance has almost no correlation with delay</strong> (≈ 0.03). Delay is driven by operational conditions, not trip length.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--alt" aria-labelledby="models-title">
+    <div class="container">
+      <div class="cs-section__head reveal">
+        <p class="eyebrow">06 — Model comparison</p>
+        <h2 class="section__title" id="models-title">Two models, judged on the cost of being wrong</h2>
+      </div>
+
+      <div class="table-wrap reveal">
+        <table class="data-table">
+          <caption class="sr-only">Performance comparison of Logistic Regression and Decision Tree on the held-out test set</caption>
+          <thead>
+            <tr>
+              <th scope="col">Model</th>
+              <th scope="col">Accuracy</th>
+              <th scope="col">Precision</th>
+              <th scope="col">Recall</th>
+              <th scope="col">F1-score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="is-selected">
+              <td>Logistic Regression <span class="mono">(selected)</span></td>
+              <td>92.19%</td>
+              <td>89.03%</td>
+              <td>71.10%</td>
+              <td>79.06%</td>
+            </tr>
+            <tr>
+              <td>Decision Tree <span class="mono">(max_depth=8)</span></td>
+              <td>92.22%</td>
+              <td>90.57%</td>
+              <td>69.74%</td>
+              <td>78.80%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="prose reveal">
+        <h3>Why Logistic Regression was chosen</h3>
+        <p>The Decision Tree is marginally ahead on accuracy and precision. Logistic Regression was still selected, for three reasons:</p>
+        <ul>
+          <li><strong>Best F1-score</strong> (79.06% vs 78.80%) — the metric the success criterion was written against.</li>
+          <li><strong>Best recall</strong> (71.10% vs 69.74%). Missing a real delay is operationally more costly than raising a false alarm, so recall is the metric that matters most here.</li>
+          <li><strong>Interpretability.</strong> Coefficients can be read directly, which makes the model explainable to people who have to act on it.</li>
+        </ul>
+        <p>The pre-defined success criterion of F1 ≥ 0.70 was met and exceeded at 0.79.</p>
+
+        <h3>Top predictive features</h3>
+        <ul>
+          <li><code>DEP_DELAY</code> — by far the strongest predictor.</li>
+          <li>Destination airport — e.g. ORD / Chicago O'Hare, a major hub.</li>
+          <li>Operating carrier — e.g. Southwest Airlines associated with lower delay risk.</li>
+          <li>Origin airport — e.g. DTW / Detroit.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section" aria-labelledby="deploy-title">
+    <div class="container">
+      <div class="cs-section__head reveal">
+        <p class="eyebrow">07 — Deployment</p>
+        <h2 class="section__title" id="deploy-title">Putting the model where it can be used</h2>
+      </div>
+      <div class="prose reveal">
+        <p>A Streamlit web app loads the trained model and returns live predictions. The model, the scaler and the feature-column list are all persisted with <code>joblib</code> and loaded at startup, so nothing is retrained at runtime.</p>
+        <p>The app has three tabs:</p>
+        <ul>
+          <li><strong>Prediction</strong> — enter carrier, origin, destination, distance and departure hour, and get a delay probability back.</li>
+          <li><strong>Insights</strong> — the EDA charts behind the model.</li>
+          <li><strong>Model Performance</strong> — metrics and the model comparison, so the numbers stay visible rather than buried in a notebook.</li>
+        </ul>
+      </div>
+
+      <figure class="figure reveal" style="margin-top: 2rem;">
+        <div class="figure__media">
+          <img src="../assets/images/projects/flightops-ai/streamlit-prediction.png" alt="Streamlit prediction tab with flight detail inputs on the left and an arrival delay risk gauge reading 6.1 percent on the right" width="1780" height="760" loading="lazy" decoding="async" data-fallback="Streamlit — Prediction tab">
+        </div>
+        <figcaption class="figure__caption">Prediction tab — flight inputs on the left, delay probability and on-time probability on the right, with the 15+ minute flag derived automatically.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--alt" aria-labelledby="bi-title">
+    <div class="container">
+      <div class="cs-section__head reveal">
+        <p class="eyebrow">08 — Business intelligence view</p>
+        <h2 class="section__title" id="bi-title">Flight Operations Analytics</h2>
+      </div>
+      <div class="prose reveal">
+        <p>A separate Power BI report was built on the same cleaned dataset, covering four analysis pages behind a branded landing page. Where the model answers "will this flight be late?", the report answers "where are the delays coming from, and who is affected?".</p>
+      </div>
+
+      <div class="figure-stack">
+        <figure class="figure reveal">
+          <div class="figure__media">
+            <img src="../assets/images/projects/flightops-ai/pbi-cover.png" alt="Power BI cover page with the Flight Operations Analytics title and four navigation cards" width="1600" height="900" loading="lazy" decoding="async" data-fallback="Power BI — Cover page">
+          </div>
+          <figcaption class="figure__caption">Cover — four navigation cards route into Flight Overview, Delay Analysis, Airline Performance and Route &amp; Airport Analysis.</figcaption>
+        </figure>
+
+        <figure class="figure reveal">
+          <div class="figure__media">
+            <img src="../assets/images/projects/flightops-ai/pbi-overview.png" alt="Power BI Flight Overview page showing KPI cards, a daily flight volume line chart and an arrival status pie chart" width="1600" height="900" loading="lazy" decoding="async" data-fallback="Power BI — Flight Overview">
+          </div>
+          <figcaption class="figure__caption">Flight Overview — 518K total flights, 79.27% on-time rate, 5.75 min average arrival delay, 12.40 min average departure delay.</figcaption>
+        </figure>
+
+        <figure class="figure reveal">
+          <div class="figure__media">
+            <img src="../assets/images/projects/flightops-ai/pbi-delays.png" alt="Power BI Delay Analysis page with delay by distance range, delay rate by time of day and a departure versus arrival delay scatter" width="1600" height="900" loading="lazy" decoding="async" data-fallback="Power BI — Delay Analysis">
+          </div>
+          <figcaption class="figure__caption">Delay Analysis — evening (6PM–12AM) is the worst window at 26.11%; overnight (12AM–6AM) the best at 9.05%.</figcaption>
+        </figure>
+
+        <figure class="figure reveal">
+          <div class="figure__media">
+            <img src="../assets/images/projects/flightops-ai/pbi-performance.png" alt="Power BI Airline Performance page comparing arrival delay rate, cancellation rate and on-time rate by carrier" width="1600" height="900" loading="lazy" decoding="async" data-fallback="Power BI — Airline Performance">
+          </div>
+          <figcaption class="figure__caption">Airline Performance — Southwest leads on-time rate at 85%, Frontier trails at 72%; PSA Airlines has the highest cancellation rate at 11.6%.</figcaption>
+        </figure>
+
+        <figure class="figure reveal">
+          <div class="figure__media">
+            <img src="../assets/images/projects/flightops-ai/pbi-routes.png" alt="Power BI Route and Airport Analysis page showing delay rate by route, delay rate by state and top airports by flight volume" width="1600" height="900" loading="lazy" decoding="async" data-fallback="Power BI — Route &amp; Airport Analysis">
+          </div>
+          <figcaption class="figure__caption">Route &amp; Airport Analysis — Michigan (34%) and West Virginia (33%) top the state delay rates; ORD, DEN and ATL are the busiest airports.</figcaption>
+        </figure>
+      </div>
+
+      <div class="callout reveal">
+        <p class="callout__title">A reporting judgement worth flagging</p>
+        <p>Several routes in the route table show a 100% delay rate. These are low-volume routes where a handful of flights drives the figure, so they are worth flagging as small-sample cases rather than presenting as a genuine ranking of the worst routes.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section" aria-labelledby="results-title">
+    <div class="container">
+      <div class="cs-section__head reveal">
+        <p class="eyebrow">09 — Results</p>
+        <h2 class="section__title" id="results-title">Where it landed</h2>
+      </div>
+
+      <ul class="metrics reveal" style="border-top: 0; padding-top: 0;">
+        <li class="metric">
+          <span class="metric__value mono">0.79</span>
+          <span class="metric__label">F1-score (criterion ≥ 0.70)</span>
+        </li>
+        <li class="metric">
+          <span class="metric__value mono">71.10%</span>
+          <span class="metric__label">Recall on delayed flights</span>
+        </li>
+        <li class="metric">
+          <span class="metric__value mono">518,368</span>
+          <span class="metric__label">Records modelled</span>
+        </li>
+        <li class="metric">
+          <span class="metric__value mono">2</span>
+          <span class="metric__label">Deployed outputs</span>
+        </li>
+      </ul>
+
+      <div class="prose reveal" style="margin-top: 2rem;">
+        <h3>What I learned</h3>
+        <ul>
+          <li>Leakage is a modelling decision, not a data-cleaning afterthought. Deciding what the model is allowed to see is the step that determines whether the score means anything.</li>
+          <li>Metric choice has to follow from the cost of the error. Picking the model with the lower accuracy was the right call once recall was recognised as the operationally expensive metric.</li>
+          <li>A predictive view and a reporting view answer different questions on the same data, and both are needed — one to act on a single flight, one to see the pattern across a month.</li>
+          <li>Scaling fitted on the full dataset is leakage too. Fitting on train only is a small habit with real consequences.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section cs-section--alt" aria-labelledby="links-title">
+    <div class="container">
+      <div class="cs-section__head reveal">
+        <p class="eyebrow">10 — Links</p>
+        <h2 class="section__title" id="links-title">Explore the project</h2>
+      </div>
+
+      <div class="cs-links">
+        <span class="cs-link cs-link--pending reveal">
+          <span>GitHub repository</span>
+          <span class="cs-link__value">Coming soon</span>
+        </span>
+        <span class="cs-link cs-link--pending reveal">
+          <span>Live Streamlit app</span>
+          <span class="cs-link__value">Coming soon</span>
+        </span>
+        <a class="cs-link reveal" href="../index.html#contact">
+          <span>Questions about the approach</span>
+          <span class="cs-link__value">Get in touch</span>
+        </a>
+        <a class="cs-link reveal" href="https://www.linkedin.com/in/abdelrahman-ashraf-6a1358333/" target="_blank" rel="noopener noreferrer">
+          <span>LinkedIn</span>
+          <span class="cs-link__value">Profile</span>
+        </a>
+      </div>
+
+      <div class="cs-actions reveal">
+        <a class="btn btn--secondary" href="../index.html#work">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+          Back to all work
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <p class="footer__meta mono">© <span id="year">2026</span> Abdelrahman Ashraf Ahmed</p>
+    <nav class="footer__links" aria-label="Footer">
+      <a href="https://github.com/Abdelrahman-Ashraf-DA" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.linkedin.com/in/abdelrahman-ashraf-6a1358333/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="mailto:abdelrhmanashrafahmed@gmail.com">Email</a>
+      <a href="../index.html">Home</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>
