@@ -1,0 +1,32 @@
+# .gitignore
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (only if you later add tooling)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Local env
+.env
+.env.local
+
+# Build output
+dist/
+build/
+
+# Source files not meant for the public site
+*.pbix
+*.ipynb_checkpoints
+*.pkl
+*.joblib
